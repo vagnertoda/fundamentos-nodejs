@@ -1,3 +1,21 @@
+### Comandos
+yarn init -y
+yarn add express
+yarn add nodemon -D (-D significa que esta dependencia vai ficar como desenvolvimento)
+adicionando o script no package.json
+"scripts": {
+  "dev": "nodemon src/index.js"
+},
+
+yarn dev
+
+### Tipo de parametros
+
+Route Params -> Identificar um recurso editar/deletar/busca
+Query Params -> Paginção/ Filtro
+Body Params -> Os objetos inserção/alteracao (json) exemplo: enviar dados para cadastro
+
+### Exemplo
 ### Requisitos
 
 -[x] Deve ser possivel criar uma conta

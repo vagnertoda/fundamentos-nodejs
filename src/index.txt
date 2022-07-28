@@ -1,0 +1,28 @@
+const { request, response } = require("express");
+const express = require("express");
+
+const app = express();
+
+app.use(express.json());
+
+app.get("/dogs", (request, response) => {
+    return response.json(["Kira 1","Kira 2", "Kira 3"]);
+});
+
+app.post("/dogs", (request, response) => {
+    return response.json(["Kira 1", "Kira 2", "Kira 3", "Kira 4"]);
+});
+
+app.put("/dogs/:id", (request, response) => {
+    return response.json(["Kira 5", "Kira 2", "Kira 3", "Kira 4"]);
+});
+
+app.patch("/dogs/:id", (request, response) => {
+    return response.json(["Kira 5", "Kira 7", "Kira 3", "Kira 4"]);
+});
+
+app.delete("/dogs/:id", (request, response) => {
+    return response.json(["Kira 5", "Kira 7", "Kira 4"]);
+});
+
+app.listen(3333);

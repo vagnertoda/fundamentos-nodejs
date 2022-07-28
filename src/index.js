@@ -1,3 +1,4 @@
+const { response } = require("express");
 const express = require("express");
 const { v4: uuidv4 } = require("uuid")
 
@@ -22,7 +23,7 @@ function verifyIfExistsAccountCPF(request, response, next){
     const customer = customers.find((customer) => customer.cpf === cpf);
 
     if(!customer){
-        return response.status(400).json({"error": "Customer not found!"})
+        return response.status(400).json({ error: "Customer not found!"})
     }
     //passa para minha rota que contem
     request.customer = customer;
@@ -117,4 +118,41 @@ app.post("/withdraw", verifyIfExistsAccountCPF,(request, response)=> {
 
 });
 
+//buscando extrato por data
+app.get("/statementdate/date", verifyIfExistsAccountCPF, (request, response) => {
+    const { customer } = request;    
+    const { date } = request.query;
+
+    //hack para data --hora
+    const dateFormat = new Date(date + " 00:00");
+    
+    //filtra dentro do statement onde a data de criacao for igual a passada por paramentro
+    const statement = customer.statement.filter((statement) => 
+        statement.created_at.toDateString() === 
+        new Date(dateFormat).toDateString()
+    );
+
+    return response.json(statement);
+});
+
+//atualizando conta
+app.put("/account", verifyIfExistsAccountCPF, (request, response) =>{
+    const { name } = request.body;
+    const { customer } = request;
+
+    customer.name = name;
+
+    return response.status(201).send();
+});
+
+//
+app.get("/account", verifyIfExistsAccountCPF, (request, response) =>{
+    const { customer } = request;
+
+    return response.json(customer);
+});
+
 app.listen(3333);
+
+
+

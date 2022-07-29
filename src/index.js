@@ -158,10 +158,19 @@ app.get("/account", verifyIfExistsAccountCPF, (request, response) =>{
 app.delete("/account", verifyIfExistsAccountCPF,(request, response) =>{
     const { customer } = request;
 
-    //splice altera o conteúdo de uma lista, adicionando novos elementos enquanto remove elementos antigos.
-    customers.splice(customer,1);
+    const indexCustomer = customers.findIndex(
+        customerIndex => customerIndex.cpf === customer.cpf
+    );
 
-    return response.status(200).json(customers);
+    //if(indexCustomer === -1){
+    //    return response.status(404).json({ error: "Account not found!"});
+    //}
+
+    //splice altera o conteúdo de uma lista, adicionando novos elementos enquanto remove elementos antigos.
+    customers.splice(indexCustomer, 1);
+
+    return response.status(204).json();
+    //return response.status(200).json(customers);
 });
 
 //verificando saldo em conta

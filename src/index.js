@@ -1,4 +1,4 @@
-const { response } = require("express");
+const { response, request } = require("express");
 const express = require("express");
 const { v4: uuidv4 } = require("uuid")
 
@@ -33,6 +33,8 @@ function verifyIfExistsAccountCPF(request, response, next){
 
 //realiza operação de credito e debito da conta
 function getBalance(statement){
+    //reduce -> executa uma função reducer (fornecida por você) para cada elemento do array,
+    // resultando num único valor de retorno.
     const balance = statement.reduce((acc, operation) => {
         if(operation.type === 'credit'){
             return acc + operation.amount;
@@ -145,11 +147,30 @@ app.put("/account", verifyIfExistsAccountCPF, (request, response) =>{
     return response.status(201).send();
 });
 
-//
+//lista contas
 app.get("/account", verifyIfExistsAccountCPF, (request, response) =>{
     const { customer } = request;
 
     return response.json(customer);
+});
+
+//Deletar conta
+app.delete("/account", verifyIfExistsAccountCPF,(request, response) =>{
+    const { customer } = request;
+
+    //splice altera o conteúdo de uma lista, adicionando novos elementos enquanto remove elementos antigos.
+    customers.splice(customer,1);
+
+    return response.status(200).json(customers);
+});
+
+//verificando saldo em conta
+app.get("/balance", verifyIfExistsAccountCPF, (request, response) =>{
+    const { customer } = request;
+
+    const balance = getBalance(customer.statement);
+
+    return response.json(balance);
 });
 
 app.listen(3333);
